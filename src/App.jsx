@@ -1,4 +1,4 @@
-import { ArrowUpRight, AtSign, Download, ExternalLink, Menu, X } from 'lucide-react'
+import { ArrowUpRight, Download, Menu, MessageCircle, X } from 'lucide-react'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Link, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import CharacterAvatar from './CharacterAvatar'
@@ -36,6 +36,35 @@ const skillGroups = [
   ['Database & Tools', 'MySQL', 'SQLite', 'Docker', 'Git'],
   ['Analysis', 'Requirements analysis', 'System design', 'Problem solving'],
 ]
+
+// Add each project screenshot path here, for example:
+// 'piptp-certification': '/media/projects/piptp-certification.png'
+const projectImages = {
+  'piptp-certification': '/media/projects/piptp-certification.png',
+  'piptp-website': '/media/projects/piptp-website.png',
+  'rt-rw-letter': '',
+  'mountain-hiking-recommendation': '/media/projects/mountain-hiking-recommendation.png',
+  'school-violation-management': '/media/projects/school-violation-management.png',
+  'internet-cafe-reservation': '/media/projects/internet-cafe-reservation.png',
+  'laundry-management': '/media/projects/laundry-management.png',
+  'technoco-gadget-dashboard': '/media/projects/technoco-gadget-dashboard.png',
+  'food-ordering': '/media/projects/food-ordering.png',
+  'tic-tac-toe-ai': '/media/projects/tic-tac-toe-ai.png',
+  'cancer-prediction': '/media/projects/cancer-prediction.png',
+}
+
+const projectScreenshots = {
+  'piptp-certification': Array.from({ length: 8 }, (_, index) => `/media/projects/piptp1-${index + 1}.png`),
+  'piptp-website': Array.from({ length: 3 }, (_, index) => `/media/projects/piptp2-${index + 1}.png`),
+  'mountain-hiking-recommendation': Array.from({ length: 5 }, (_, index) => `/media/projects/sipendaki${index + 1}.png`),
+  'school-violation-management': Array.from({ length: 4 }, (_, index) => `/media/projects/sv${index + 1}.png`),
+  'internet-cafe-reservation': Array.from({ length: 5 }, (_, index) => `/media/projects/inca${index + 1}.png`),
+  'laundry-management': Array.from({ length: 6 }, (_, index) => `/media/projects/laundry${index + 1}.png`),
+  'technoco-gadget-dashboard': Array.from({ length: 6 }, (_, index) => `/media/projects/techno${index + 1}.png`),
+  'food-ordering': Array.from({ length: 4 }, (_, index) => `/media/projects/canteen${index + 1}.png`),
+  'tic-tac-toe-ai': Array.from({ length: 3 }, (_, index) => `/media/projects/ttt${index + 1}.png`),
+  'cancer-prediction': Array.from({ length: 4 }, (_, index) => `/media/projects/prostate${index + 1}.png`),
+}
 
 const projectDetails = {
   'piptp-certification': {
@@ -88,7 +117,12 @@ const projectDetails = {
 }
 
 function ProjectCard({ project }) {
-  return <Link className="project-card" to={`/projects/${project.slug}`}><div className="project-visual"><span>{project.number}</span><div className="project-shape" /></div><div className="project-info"><p className="project-category">{project.category}</p><h3>{project.title}</h3><p>{project.description}</p><div className="tag-list">{project.tech.map((tech) => <span key={tech}>{tech}</span>)}</div><span className="card-link">View details <ArrowUpRight size={14} /></span></div></Link>
+  const image = projectImages[project.slug]
+  return <Link className="project-card" to={`/projects/${project.slug}`}><div className="project-visual"><span>{project.number}</span>{image ? <img src={image} alt={`${project.title} screenshot`} /> : <div className="project-shape" />}</div><div className="project-info"><p className="project-category">{project.category}</p><h3>{project.title}</h3><p>{project.description}</p><div className="tag-list">{project.tech.map((tech) => <span key={tech}>{tech}</span>)}</div><span className="card-link">View details <ArrowUpRight size={14} /></span></div></Link>
+}
+
+function InstagramMark() {
+  return <svg className="instagram-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" /><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1.8" /><circle cx="17.4" cy="6.6" r="1" fill="currentColor" /></svg>
 }
 
 function Home() {
@@ -140,11 +174,45 @@ function Home() {
         <section className="content-section projects-section" id="projects"><div className="section-head"><div><p className="eyebrow"><span /> Projects</p><h2>Projects with purpose.</h2></div><p className="section-note">A collection of systems, experiments, and collaborations from my development journey.</p></div><div className="project-segment"><div className="segment-heading"><span>01</span><h3>Internship experience</h3><p>Professional work completed during my internships at PIPTP Universitas Airlangga and Mayantara Media Group.</p></div><div className="project-grid">{internshipProjects.map((project) => <ProjectCard project={project} key={project.slug} />)}</div></div><div className="project-segment"><div className="segment-heading"><span>02</span><h3>Selected projects</h3><p>Academic, independent, and collaborative projects exploring web development, data, machine learning, and interactive applications.</p></div><div className="project-grid">{projects.map((project) => <ProjectCard project={project} key={project.slug} />)}</div></div></section>
         <section className="content-section experience-section muted" id="experience"><p className="eyebrow"><span /> Experience</p><div className="section-head"><h2>Learning by<br /><em>building for real people.</em></h2><p className="section-note">Internships and project work have taught me to combine implementation with communication, testing, and iteration.</p></div><div className="timeline">{experience.map((item) => <article className="timeline-item" key={item.date}><div className="timeline-date">{item.date}</div><div><h3>{item.role}</h3><p className="timeline-company">{item.company}</p><p>{item.detail}</p></div></article>)}</div></section>
         <section className="content-section skills-section" id="skills"><div className="section-head"><div><p className="eyebrow"><span /> Skills</p><h2>Tools for turning<br /><em>ideas into systems.</em></h2></div><p className="section-note">Technologies and methods I can discuss confidently and continue to develop through practice.</p></div><div className="skill-grid">{skillGroups.map(([group, ...skills]) => <div className="skill-group" key={group}><h3>{group}</h3>{skills.map((skill) => <span key={skill}>{skill}</span>)}</div>)}</div></section>
-        <section className="contact-section muted" id="contact"><div><p className="eyebrow"><span /> Contact</p><h2>Let's build something<br /><em>useful together.</em></h2></div><div className="contact-details"><p>Have a project, opportunity, or system problem to talk through?</p><a className="email-link" href="mailto:damarwidyansyah@gmail.com">damarwidyansyah@gmail.com <ArrowUpRight size={17} /></a><div className="socials"><a href="https://www.linkedin.com/in/muhammad-damar-widyansyah" aria-label="LinkedIn"><ExternalLink size={18} /></a><a href="https://github.com/damarwdsyh003" aria-label="GitHub"><ExternalLink size={18} /></a><a href="mailto:damarwidyansyah@gmail.com" aria-label="Email"><AtSign size={18} /></a></div></div></section>
+        <section className="contact-section muted" id="contact"><div><p className="eyebrow"><span /> Contact</p><h2>Let's build something<br /><em>useful together.</em></h2></div><div className="contact-details"><p>Have a project, opportunity, or system problem to talk through?</p><a className="email-link" href="mailto:damarwidyansyah@gmail.com">damarwidyansyah@gmail.com <ArrowUpRight size={17} /></a><div className="socials"><a href="https://www.linkedin.com/in/muhammad-damar-widyansyah" target="_blank" rel="noreferrer" aria-label="LinkedIn"><span className="social-mark linkedin-mark">in</span></a><a href="https://wa.me/6281455028343" target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle size={18} /></a><a href="https://www.instagram.com/damarwdsyh" target="_blank" rel="noreferrer" aria-label="Instagram"><InstagramMark /></a></div></div></section>
       </main>
       <footer><span>© 2026 Damar's Digital Space</span><span>Built with curiosity.</span></footer>
     </div>
   )
+}
+
+function LegacyProjectDetail() {
+  const { slug } = useParams()
+  const navigate = useNavigate()
+  const project = projectDetails[slug]
+
+  if (!project) {
+    return <main className="not-found"><p className="eyebrow"><span /> Project not found</p><h1>This project page does not exist.</h1><Link className="button button-primary" to="/">Back home <ArrowUpRight size={16} /></Link></main>
+  }
+
+  return <main className="project-detail"><div className="detail-top"><button className="back-link" onClick={() => navigate(-1)}>← Back</button><span className="detail-index">Project / {String(Object.keys(projectDetails).indexOf(slug) + 1).padStart(2, '0')}</span></div><header className="detail-hero"><p className="eyebrow"><span /> {project.category}</p><h1>{project.title}</h1><p className="detail-summary">{project.summary}</p></header><div className="detail-layout"><aside><p className="detail-label">Role</p><p>{project.role}</p><p className="detail-label">Technology</p><div className="tag-list">{project.stack.map((tech) => <span key={tech}>{tech}</span>)}</div></aside><div className="detail-content"><section><p className="detail-label">Overview</p><p>{project.context}</p></section><section><p className="detail-label">Responsibilities</p><ul>{project.responsibilities.map((item) => <li key={item}>{item}</li>)}</ul></section><section className="detail-note"><p>{project.note}</p></section></div></div><div className="detail-footer"><Link to="/#projects">← View all projects</Link><Link to="/">Home <ArrowUpRight size={15} /></Link></div></main>
+}
+
+function LegacyProjectCarousel({ images, title }) {
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  if (!images?.length) return null
+
+  const previous = () => setActiveIndex((index) => (index - 1 + images.length) % images.length)
+  const next = () => setActiveIndex((index) => (index + 1) % images.length)
+
+  return <section className="project-carousel" aria-label={`${title} screenshots`}><div className="carousel-frame"><img src={images[activeIndex]} alt={`${title} screenshot ${activeIndex + 1}`} /><button type="button" className="carousel-control previous" onClick={previous} aria-label="Previous screenshot">←</button><button type="button" className="carousel-control next" onClick={next} aria-label="Next screenshot">→</button></div><div className="carousel-footer"><span>{String(activeIndex + 1).padStart(2, '0')} / {String(images.length).padStart(2, '0')}</span><div className="carousel-dots">{images.map((image, index) => <button type="button" key={image} className={index === activeIndex ? 'active' : ''} onClick={() => setActiveIndex(index)} aria-label={`Show screenshot ${index + 1}`} />)}</div></div></section>
+}
+
+function ProjectCarousel({ images, title }) {
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  if (!images?.length) return null
+
+  const previous = () => setActiveIndex((index) => Math.max(index - 1, 0))
+  const next = () => setActiveIndex((index) => Math.min(index + 1, images.length - 1))
+
+  return <section className="project-carousel" aria-label={`${title} screenshots`}><div className="carousel-frame"><div className="carousel-track" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>{images.map((image, index) => <img key={image} src={image} alt={`${title} screenshot ${index + 1}`} />)}</div><button type="button" className="carousel-control previous" onClick={previous} disabled={activeIndex === 0} aria-label="Previous screenshot">&lt;</button><button type="button" className="carousel-control next" onClick={next} disabled={activeIndex === images.length - 1} aria-label="Next screenshot">&gt;</button></div><div className="carousel-footer"><span>{String(activeIndex + 1).padStart(2, '0')} / {String(images.length).padStart(2, '0')}</span><div className="carousel-dots">{images.map((image, index) => <button type="button" key={image} className={index === activeIndex ? 'active' : ''} onClick={() => setActiveIndex(index)} aria-label={`Show screenshot ${index + 1}`} />)}</div></div></section>
 }
 
 function ProjectDetail() {
@@ -156,7 +224,8 @@ function ProjectDetail() {
     return <main className="not-found"><p className="eyebrow"><span /> Project not found</p><h1>This project page does not exist.</h1><Link className="button button-primary" to="/">Back home <ArrowUpRight size={16} /></Link></main>
   }
 
-  return <main className="project-detail"><div className="detail-top"><button className="back-link" onClick={() => navigate(-1)}>← Back</button><span className="detail-index">Project / {String(Object.keys(projectDetails).indexOf(slug) + 1).padStart(2, '0')}</span></div><header className="detail-hero"><p className="eyebrow"><span /> {project.category}</p><h1>{project.title}</h1><p className="detail-summary">{project.summary}</p></header><div className="detail-layout"><aside><p className="detail-label">Role</p><p>{project.role}</p><p className="detail-label">Technology</p><div className="tag-list">{project.stack.map((tech) => <span key={tech}>{tech}</span>)}</div></aside><div className="detail-content"><section><p className="detail-label">Overview</p><p>{project.context}</p></section><section><p className="detail-label">Responsibilities</p><ul>{project.responsibilities.map((item) => <li key={item}>{item}</li>)}</ul></section><section className="detail-note"><p>{project.note}</p></section></div></div><div className="detail-footer"><Link to="/#projects">← View all projects</Link><Link to="/">Home <ArrowUpRight size={15} /></Link></div></main>
+  const screenshots = projectScreenshots[slug]
+  return <main className="project-detail"><div className="detail-top"><button className="back-link" onClick={() => navigate(-1)}>← Back</button><span className="detail-index">Project / {String(Object.keys(projectDetails).indexOf(slug) + 1).padStart(2, '0')}</span></div><header className="detail-hero"><p className="eyebrow"><span /> {project.category}</p><h1>{project.title}</h1><p className="detail-summary">{project.summary}</p></header><ProjectCarousel images={screenshots} title={project.title} /><div className="detail-layout"><aside><p className="detail-label">Role</p><p>{project.role}</p><p className="detail-label">Technology</p><div className="tag-list">{project.stack.map((tech) => <span key={tech}>{tech}</span>)}</div></aside><div className="detail-content"><section><p className="detail-label">Overview</p><p>{project.context}</p></section><section><p className="detail-label">Responsibilities</p><ul>{project.responsibilities.map((item) => <li key={item}>{item}</li>)}</ul></section><section className="detail-note"><p>{project.note}</p></section></div></div><div className="detail-footer"><Link to="/#projects">← View all projects</Link><Link to="/">Home <ArrowUpRight size={15} /></Link></div></main>
 }
 
 function App() {
